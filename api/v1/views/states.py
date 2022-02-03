@@ -24,8 +24,8 @@ def all_states():
         state_dict = request.get_json()
         if "name" not in state_dict:
             return (jsonify("Missing name"), 400)
-        new_state = State(state_dict)
-        print(new_state)
+        new_state = State(**state_dict)
+        new_state.save()
         return (jsonify(new_state.to_dict())), 201
 
 
@@ -39,7 +39,9 @@ def get_state(state_id):
         state = state.to_dict()
         return (jsonify(state))
     else:
-        if not storage.get(State, state_id):
+        state = storage.get(State, state_id)
+        if not state:
             abort(404)
-        storage.delete(state_id)
+        storage.delete(state)
+        storage.save()
         return (jsonify({})), 200
