@@ -9,6 +9,7 @@ from os import getenv
 app = Flask(__name__)
 app.register_blueprint(app_views)
 
+
 @app.teardown_appcontext
 def teardown(self):
     """remove the current SQLAlchemy Session"""
@@ -18,6 +19,7 @@ def teardown(self):
 @app.errorhandler(404)
 def not_found(error):
     return jsonify({"error": "Not found"})
+
 
 if __name__ == "__main__":
     if getenv("HBNB_API_HOST"):
