@@ -3,7 +3,6 @@
 
 from flask import jsonify
 from api.v1.views import app_views
-from holberton.AirBnB_clone_v3.models import amenity
 from models import storage
 
 
@@ -13,22 +12,21 @@ def return_status():
     return (jsonify(status))
 
 
-@app_views.route('/api/v1/stats')
-def return_status():
-    """retrieves the number of each objects"""
-    from AirBnB_clone_v3.models.amenity import Amenity
-    from AirBnB_clone_v3.models.city import City
-    from AirBnB_clone_v3.models.place import Place
-    from AirBnB_clone_v3.models.review import Review
-    from AirBnB_clone_v3.models.state import State
-    from AirBnB_clone_v3.models.user import User
+@app_views.route('/stats')
+def return_stats():
+    """retrieves number of each class object"""
+    from models.amenity import Amenity
+    from models.city import City
+    from models.place import Place
+    from models.review import Review
+    from models.state import State
+    from models.user import User
 
-
-    dic = {}
-    dic["amenity"] = storage.count(Amenity)
-    dic["cities"] = storage.count(City)
-    dic["places"] = storage.count(Place)
-    dic["reviews"] = storage.count(Review)
-    dic["states"] = storage.count(State)
-    dic["users"] = storage.count(User)
-    return dic
+    stats = {}
+    stats["amenity"] = storage.count(Amenity)
+    stats["cities"] = storage.count(City)
+    stats["places"] = storage.count(Place)
+    stats["reviews"] = storage.count(Review)
+    stats["states"] = storage.count(State)
+    stats["users"] = storage.count(User)
+    return (jsonify(stats))
