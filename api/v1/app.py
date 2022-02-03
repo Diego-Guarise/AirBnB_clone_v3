@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """REST Api v1"""
 
-from flask import Flask
+from flask import Flask, jsonify
 from models import storage
 from api.v1.views import app_views
 from os import getenv
@@ -14,6 +14,10 @@ def teardown(self):
     """remove the current SQLAlchemy Session"""
     storage.close()
 
+
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({"error": "Not found"})
 
 if __name__ == "__main__":
     if getenv("HBNB_API_HOST"):
