@@ -7,7 +7,7 @@ from models import storage
 from models.state import State
 
 
-@app_views.route('/states/', methods=['GET', 'POST'])
+@app_views.route('/states/', methods=['GET', 'POST'], strict_slashes=False)
 def get_states():
     """get a list of all State objects"""
     if request.method == 'GET':
@@ -30,7 +30,7 @@ def get_states():
         return (jsonify(new_state.to_dict()), 201)
 
 
-@app_views.route('/states/<state_id>', methods=['GET', 'PUT', 'DELETE'])
+@app_views.route('/states/<state_id>', methods=['GET', 'PUT', 'DELETE'], strict_slashes=False)
 def get_state(state_id):
     """get state by id"""
     state = storage.get(State, state_id)
