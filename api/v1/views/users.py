@@ -39,7 +39,7 @@ def get_user(user_id):
         abort(404)
     if request.method == 'GET':
         """display User"""
-        return jsonify(user.to_dict)
+        return jsonify(user.to_dict())
     elif request.method == 'PUT':
         """updates User"""
         content_type = request.headers.get('Content-Type')
