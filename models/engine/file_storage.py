@@ -70,20 +70,15 @@ class FileStorage:
         self.reload()
 
     def get(self, cls, id):
-        """get element"""
-        obj = cls + '.' + id
-        try:
-            return self.__objects[obj]
-        except KeyError:
+        """get element by class and id"""
+        if cls and cls in classes.values() and id:
+            key = cls.__name__ + "." + id
+            if key in self.__objects:
+                return self.__objects.get(key)
             return None
 
     def count(self, cls=None):
-        """retrieves number of objects"""
-        count = 0
-        if cls:
-            for obj in self.__objects.values():
-                if cls in obj:
-                    count += 1
-            return count
-        else:
-            return len(self.__objects)
+        """get number of instances, classname optional"""
+        if cls and cls in classes.values():
+            return len(self.all(cls))
+        return len(self.__objects)
