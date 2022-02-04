@@ -8,7 +8,7 @@ from models.state import State
 
 
 @app_views.route('/states/', methods=['GET', 'POST'])
-def all_states():
+def get_states():
     """get a list of all State objects"""
     if request.method == 'GET':
         states = storage.all(State).values()
@@ -18,6 +18,7 @@ def all_states():
             states_dict.append(state_dict)
         return (jsonify(states_dict))
     else:
+        """creates new State object"""
         content_type = request.headers.get('Content-Type')
         if (content_type != 'application/json'):
             return (jsonify("Not a JSON"), 400)
