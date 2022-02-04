@@ -26,22 +26,33 @@ def all_states():
             return (jsonify("Missing name"), 400)
         new_state = State(**state_dict)
         new_state.save()
-        return (jsonify(new_state.to_dict())), 201
+        return (jsonify(new_state.to_dict()), 201)
 
 
-@app_views.route('/states/<state_id>', methods=['GET', 'DELETE'])
+@app_views.route('/states/<state_id>', methods=['GET', 'PUT', 'DELETE'])
 def get_state(state_id):
     """get state by id"""
+    state = storage.get(State, state_id)
+    if not state:
+        abort(404)
     if request.method == 'GET':
-        state = storage.get(State, state_id)
-        if not state:
-            abort(404)
+        """display state as JSON"""
         state = state.to_dict()
         return (jsonify(state))
+    elif request.method == 'PUT':
+        """edit state by id"""
+        content_type = request.headers.get('Content-Type')
+        if (content_type != 'application/json'):
+            return (jsonify("Not a JSON"), 400)
+        state_dict = request.get_json()
+        try:
+            state.name = state_dict["name"]
+            storage.save()
+        except Exception:
+            pass
+        return (jsonify(state.to_dict()), 200)
     else:
-        state = storage.get(State, state_id)
-        if not state:
-            abort(404)
+        """delete state by id"""
         storage.delete(state)
         storage.save()
         return (jsonify({})), 200
