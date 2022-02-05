@@ -11,7 +11,7 @@ STORAGE_TYPE = environ.get('HBNB_TYPE_STORAGE')
 
 
 @app_views.route('/places/<place_id>/amenities', methods=['GET'])
-def get_amenitites(place_id):
+def get_amenitites(place_id=None):
     """Create a new view for the link between Place objects and Amenity"""
     place = storage.get('Place', place_id)
     if place is None:
@@ -30,7 +30,7 @@ def get_amenitites(place_id):
 
 @app_views.route('/places/<place_id>/amenities/<amenity_id>',
                  methods=['DELETE', 'POST'])
-def get_amenity(place_id, amenity_id):
+def get_amenity(place_id=None, amenity_id=None):
     """get amenity by place id and amenity id"""
     place = storage.get('Place', place_id)
     if place is None:
@@ -45,7 +45,7 @@ def get_amenity(place_id, amenity_id):
             place.amenities.remove(amenity)
         else:
             place.amenity_ids.pop(amenity.id, None)
-        storage.save()
+        place.save()
         return jsonify({}), 200
     else:
         if place.id == amenity.place_id:
