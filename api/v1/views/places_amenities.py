@@ -4,8 +4,8 @@
 from flask import jsonify, abort, request
 from api.v1.views import app_views
 from models import storage
-from models.amenity import Amenity
-from models.place import Place
+# from models.amenity import Amenity
+# from models.place import Place
 from os import environ
 STORAGE_TYPE = environ.get('HBNB_TYPE_STORAGE')
 
@@ -13,11 +13,11 @@ STORAGE_TYPE = environ.get('HBNB_TYPE_STORAGE')
 @app_views.route('/places/<place_id>/amenities', methods=['GET'])
 def get_amenitites(place_id):
     """Create a new view for the link between Place objects and Amenity"""
-    place = storage.get(Place, place_id)
+    place = storage.get('Place', place_id)
     if not place:
         abort(404)
     if request.method == 'GET':
-        amenities = storage.all(Amenity).values()
+        amenities = storage.all('Amenity').values()
         place_amenities = []
         for amenity in amenities:
             if amenity.place_id == place_id:
@@ -29,10 +29,10 @@ def get_amenitites(place_id):
                  methods=['DELETE', 'POST'])
 def get_amenity(place_id, amenity_id):
     """get amenity by place id and amenity id"""
-    place = storage.get(Place, place_id)
+    place = storage.get('Place', place_id)
     if not place:
         abort(404)
-    amenity = storage.get(Amenity, amenity_id)
+    amenity = storage.get('Amenity', amenity_id)
     if not amenity:
         abort(404)
     if request.method == 'DELETE':
@@ -51,4 +51,4 @@ def get_amenity(place_id, amenity_id):
             place.amenities.append(amenity)
         else:
             place.amenities = amenity
-         return jsonify(amenity.to_json()), 201
+        return jsonify(amenity.to_json()), 201
