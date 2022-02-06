@@ -9,7 +9,7 @@ from models.place import Place
 
 
 @app_views.route('/places/<place_id>/amenities', methods=['GET'])
-def get_amenitites(place_id):
+def get_place_amenitites(place_id):
     """Create a new view for the link between Place objects and Amenity"""
     place = storage.get(Place, place_id)
     if not place:
@@ -25,7 +25,7 @@ def get_amenitites(place_id):
 
 @app_views.route('/places/<place_id>/amenities/<amenity_id>',
                  methods=['DELETE', 'POST'])
-def get_amenity(place_id, amenity_id):
+def get_place_amenity(place_id, amenity_id):
     """get amenity by place id and amenity id"""
     place = storage.get(Place, place_id)
     if not place:
