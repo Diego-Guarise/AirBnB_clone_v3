@@ -37,22 +37,20 @@ def get_place_amenity(place_id, amenity_id):
     amenity = storage.get(Amenity, amenity_id)
     if not amenity:
         abort(404)
+    if place.id != amenity.place_id:
+        abort(404)
     if request.method == 'DELETE':
         if environ.get('HBNB_TYPE_STORAGE') == 'db':
-            if place.id != amenity.place_id:
-                abort(404)
             place.amenity.remove(amenity)
             place.save()
             return jsonify({})
         else:
-            if place.id != amenity.place_id:
-                abort(404)
             place.amenity_ids.remove(amenity_id)
             place.save()
         return jsonify({}), 200
     else:
         if environ.get('HBNB_TYPE_STORAGE') == 'db':
-            if amenity in place.amenity_ids:
+            if amenity in place.amenities:
                 return jsonify(amenity.to_dict()), 200
             else:
                 place.amenities.append(amenity)
@@ -61,6 +59,6 @@ def get_place_amenity(place_id, amenity_id):
             if amenity_id in place.amenity_ids:
                 return jsonify(amenity.to_dict()), 200
             else:
-                place.amenities_ids.append(amenity)
+                place.amenities_ids.append(amenity_id)
                 place.save()
-        return jsonify(Amenity.to_dict()), 201
+        return jsonify(amenity.to_dict()), 201
