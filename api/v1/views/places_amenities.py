@@ -6,7 +6,7 @@ from api.v1.views import app_views
 from models import storage
 from models.amenity import Amenity
 from models.place import Place
-from os import environ
+from os import getenv
 
 
 @app_views.route('/places/<place_id>/amenities', methods=['GET'],
@@ -17,7 +17,7 @@ def get_place_amenitites(place_id):
     if not place:
         abort(404)
     list_of_all_amenity = []
-    if environ.get('HBNB_TYPE_STORAGE') == 'db':
+    if getenv('HBNB_TYPE_STORAGE') == 'db':
         for value in place.amenities:
             list_of_all_amenity.append(value.to_dict())
     else:
@@ -40,7 +40,7 @@ def get_place_amenity(place_id, amenity_id):
     if place.id != amenity.place_id:
         abort(404)
     if request.method == 'DELETE':
-        if environ.get('HBNB_TYPE_STORAGE') == 'db':
+        if getenv('HBNB_TYPE_STORAGE') == 'db':
             place.amenities.remove(amenity)
             place.save()
             return jsonify({})
@@ -49,7 +49,7 @@ def get_place_amenity(place_id, amenity_id):
             place.save()
         return jsonify({}), 200
     else:
-        if environ.get('HBNB_TYPE_STORAGE') == 'db':
+        if getenv('HBNB_TYPE_STORAGE') == 'db':
             if amenity in place.amenities:
                 return jsonify(amenity.to_dict()), 200
             else:
