@@ -13,15 +13,15 @@ from os import environ
                  strict_slashes=False)
 def get_place_amenitites(place_id):
     """Create a new view for the link between Place objects and Amenity"""
-    places = storage.get(Place, place_id)
-    if not places:
+    place = storage.get(Place, place_id)
+    if not place:
         abort(404)
     list_of_all_amenity = []
     if environ.get('HBNB_TYPE_STORAGE') == 'db':
-        for values in places.amenities:
-            list_of_all_amenity.append(values.to_dict())
+        for value in place.amenities:
+            list_of_all_amenity.append(value.to_dict())
     else:
-        for value in places.amenity_ids:
+        for value in place.amenity_ids:
             list_of_all_amenity.append(
                 storage.get(Amenity, value).to_dict())
     return jsonify(list_of_all_amenity)
@@ -41,7 +41,7 @@ def get_place_amenity(place_id, amenity_id):
         abort(404)
     if request.method == 'DELETE':
         if environ.get('HBNB_TYPE_STORAGE') == 'db':
-            place.amenity.remove(amenity)
+            place.amenities.remove(amenity)
             place.save()
             return jsonify({})
         else:
